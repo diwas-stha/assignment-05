@@ -46,7 +46,7 @@ def get_all_employees(db: Session = Depends(get_db)):
 
 
 @app.get("/employee/{employee_id}", response_model=EmployeeResponse)
-def get_employee(employee_id: str, db: Session = Depends(get_db)):
+def get_employee(employee_id: int, db: Session = Depends(get_db)):
     # create a new database session
     session = db
 

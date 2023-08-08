@@ -26,9 +26,9 @@ def get_db():
         db.close()
 
 
-@app.on_event("startup")
-def create_table():
-    Base.metadata.create_all(bind=engine)
+# @app.on_event("startup")
+# def create_table():
+#     Base.metadata.create_all(bind=engine)
 
 
 @app.get("/employees/", response_model=List[EmployeeResponse])
@@ -45,19 +45,20 @@ def get_all_employees(db: Session = Depends(get_db)):
     return employees
 
 
-@app.get("/employees/{employee_id}", response_model=EmployeeResponse)
-def get_employee(id: int, db: Session = Depends(get_db)):
+@app.get("/employee/{employee_id}", response_model=EmployeeResponse)
+def get_employee(employee_id: str, db: Session = Depends(get_db)):
     # create a new database session
     session = db
 
     # Get the employee with the given ID
-    employee = session.query(Employee).filter(Employee.id == id).first()
+    employee = session.query(Employee).filter(
+        Employee.id == employee_id).first()
 
     session.close()
 
     if not employee:
         raise HTTPException(
-            status_code=404, detail=f"Employee with id {id} not found")
+            status_code=404, detail=f"Employee with id {employee_id} not found")
 
     return employee
 
